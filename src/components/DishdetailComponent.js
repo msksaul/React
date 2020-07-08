@@ -48,10 +48,12 @@ class DishDetail extends Component {
         <h4 id='header'>Comments</h4>
         {dish.comments.map((comment) =>{
           if (comment != null) {
+            // const options = { year: "numeric", month: "short", day: "numeric" };
             return (
               <ul key={comment.id} className='list-unstyled'>
                 <li>{comment.comment}</li>
                 <li>-- {comment.author}, {this.getMonth(comment.date)} {this.getDay(comment.date)}, {this.getYear(comment.date)}</li>
+                {/* <li>{new Date(comment.date).toLocaleDateString("en-US", options)}</li> */}
               </ul>
             )
             }

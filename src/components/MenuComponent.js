@@ -24,7 +24,7 @@ class Menu extends Component {
   renderDish(dish) {
     if (dish != null) {
       return(
-        <DishDetail dish={this.state.selectedDish}/>
+        <DishDetail dish={dish}/>
       );
     }
     else {
