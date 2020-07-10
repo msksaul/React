@@ -7,11 +7,11 @@ class DishDetail extends Component {
     super(props);
 
     this.state = {
-      
     };
   }
 
   renderDish(dish) {
+    if (dish !== undefined) {
       return(
         <Card>
           <CardImg width='100%' src={dish.image} alt={dish.name}/>
@@ -21,6 +21,12 @@ class DishDetail extends Component {
           </CardBody>
         </Card>
       );
+    }
+    else {
+      return (
+        <div></div>
+      )
+    }
   }
 
   getYear(date) {
@@ -43,6 +49,7 @@ class DishDetail extends Component {
   }
 
   renderComments(dish) {
+    if (dish !== undefined) {
     return(
       <div key={dish.id}>
         <h4 id='header'>Comments</h4>
@@ -66,6 +73,12 @@ class DishDetail extends Component {
       }
       </div>
     );
+  }
+  else {
+    return (
+      <div></div>
+    )
+  }
 }
 
   render() {
