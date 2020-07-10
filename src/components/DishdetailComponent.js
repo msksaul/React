@@ -10,10 +10,18 @@ class DishDetail extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('Dishdetail component componentDidMount is invoked')
+  }
+
+  componentDidUpdate() {
+    console.log('Dishdetail component componentDidUpdate is invoked')
+  }
+
   renderDish(dish) {
     if (dish !== undefined) {
       return(
-        <Card>
+        <Card key={dish.id}>
           <CardImg width='100%' src={dish.image} alt={dish.name}/>
           <CardBody>
             <CardTitle><b>{dish.name}</b></CardTitle>
@@ -82,6 +90,8 @@ class DishDetail extends Component {
 }
 
   render() {
+
+    console.log('Dishdetail component render is invoked');
 
     return (
       <div className='container'>
