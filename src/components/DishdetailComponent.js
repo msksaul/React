@@ -1,6 +1,84 @@
-import React from 'react';
-import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, 
+         Modal, ModalHeader, ModalBody, FormGroup, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => (val) && (val.length >= len);
+
+class CommentForm extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      isModalOpen: false
+    }
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(values) {
+    alert('Current State is:'+JSON.stringify(values))
+  } 
+
+  toggleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    })
+  }
+  render(){
+    return(
+      <div>
+        <Button onClick={this.toggleModal} outline color='secondary'>
+          <span className='fa fa-pencil'></span> Submit Comment
+        </Button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={this.handleSubmit}>
+              <FormGroup>
+                <Label htmlFor='rating'>Rating</Label>
+                <Control.select model='.rating' name='rating'
+                  className='form-control'>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </Control.select>
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor='author'>Your Name</Label>
+                <Control.text model='.author' id='author' name='author'
+                  className='form-control'
+                  validators={{
+                      required, minLength: minLength(3), maxLength: maxLength(15)
+                  }} 
+                  placeholder='Your Name'/>
+                <Errors className='text-danger' model='.author' show='touched'
+                  messages={{
+                      required:'Required ',
+                      minLength: 'Must be greater the 2 characteres ',
+                      maxLength: 'Must be 15 characteres or less'
+                  }}>
+                </Errors>
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor='comment'>Comment</Label>
+                <Control.textarea model='.comment' id='comment' name='comment' 
+                  rows='6'
+                  className='form-control'/>
+              </FormGroup>
+              <Button type='submit' value='submit' color='primary'>Submit</Button>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
+      </div>
+    )
+  }
+}
 
 function RenderDish({dish}) {
   return(
@@ -14,37 +92,17 @@ function RenderDish({dish}) {
   );
 };
 
-function GetYear(date) {
-  return (
-    date[0]+date[1]+date[2]+date[3]
-  )
-}
-
-function GetMonth(date) {
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  return (
-    monthNames[parseInt((date[5]+date[6])-1)]
-  )
-}
-
-function GetDay(date) {
-  return (
-    date[8]+date[9]
-  )
-}
-
 function RenderComments({comments}) {
   return(
     <div>
       <h4 id='header'>Comments</h4>
       {comments.map((comment) =>{
         if (comment != null) {
-          // const options = { year: "numeric", month: "short", day: "numeric" };
+          const options = { year: "numeric", month: "short", day: "numeric" };
           return (
             <ul key={comment.id} className='list-unstyled'>
               <li>{comment.comment}</li>
-              <li>-- {comment.author}, {GetMonth(comment.date)} {GetDay(comment.date)}, {GetYear(comment.date)}</li>
-              {/* <li>{new Date(comment.date).toLocaleDateString("en-US", options)}</li> */}
+              <li>-- {comment.author}, {new Date(comment.date).toLocaleDateString("en-US", options)}</li>
             </ul>
           )
           }
@@ -54,7 +112,8 @@ function RenderComments({comments}) {
           )
         }
       })
-    }
+      }
+      <CommentForm/>
     </div>
   );
 }
